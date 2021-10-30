@@ -2,10 +2,10 @@ import requests
 import json
 import time
 
-g_Url = 'http://x.ouchn.cn/'
-g_Cookie = 'UserName=XXXXXXXXX; MoodleSession=XXXXXXXXXXX'
-g_Sectionid = 0
-g_Courseid = 0
+g_Url = 'http://guangzhou.ouchn.cn/'
+g_Cookie = 'UserName=xxxxx; MoodleSession=xxxxxx'
+g_Sectionid = 82893
+g_Courseid = 1936
 g_SectionList = []
 
 RequestHeadres = {
@@ -17,7 +17,7 @@ RequestHeadres = {
 }
 
 
-def GetSectionInfo(Sectionid, t=0.5):
+def GetSectionInfo(Sectionid, t=1):
     # 延迟
     time.sleep(t)
     data = {'sectionid': Sectionid, 'courseid': g_Courseid}
@@ -39,7 +39,7 @@ def GetSectionJob(Sectionid):
     return Info
 
 
-def Fuck(Sectionid, mid, t=0.5):
+def Fuck(Sectionid, mid, t=2):
     # 延迟
     time.sleep(t)
     try:
@@ -90,17 +90,19 @@ def FuckOuchn():
         List = GetSectionJob(var['id'])
         print(var['name'])
         for i in List:
-            if i['type'] == 'url' and int(i['is_com']) == 0:
-                print('\t' + i['name'], end='')
-                IsSuccess = Fuck(var['id'], i['id'], 1)
-                if IsSuccess == 1:
-                    print('  success', end='')
-                else:
-                    print('  fail', end='')
+            if i['type'] == 'url' or i['type'] == 'page':
+                if int(i['is_com']) == 0:
+                    print('\t' + i['name'], end='')
+                    IsSuccess = Fuck(var['id'], i['id'])
+                    if IsSuccess == 1:
+                        print('  success', end='')
+                    else:
+                        print('  fail', end='')
 
-                print('\n')
+                    print('\n')
 
         print('\n')
 
 InitSectionList()
 FuckOuchn()
+
